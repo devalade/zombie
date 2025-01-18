@@ -34,8 +34,11 @@ jobs:
       run: |
         gem install kamal
 
+    - name: Create Kamal secrets directory
+      run: |
+        mkdir -p .kamal
+        echo "KAMAL_REGISTRY_PASSWORD=${{ secrets.GITHUB_TOKEN }}" > .kamal/secrets
+
     - name: Deploy Kamal App
-      env:
-        KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
       run: |
         kamal deploy
