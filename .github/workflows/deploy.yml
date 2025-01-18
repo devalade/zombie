@@ -1,0 +1,41 @@
+name: Deploy Kamal App with SSH
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Add SSH public key to known hosts
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/id_ed25519.pub
+        chmod 644 ~/.ssh/id_ed25519.pub
+        ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0'  # Specify the Ruby version used by Kamal if needed
+
+    - name: Install Kamal
+      run: |
+        gem install kamal
+
+    - name: Deploy Kamal App
+      env:
+        KAMAL_ENV: production  # Set the environment variable for Kamal
+      run: |
+        kamal deploy
