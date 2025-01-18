@@ -7,7 +7,7 @@ image: devalade/zombie
 # Deploy to these servers.
 servers:
   web:
-    - 65.109.232.76  
+    - kamal.zecreator.com
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -18,8 +18,8 @@ servers:
 #
 # Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 proxy:
-  ssl: true
-  host: 65.109.232.76  
+  ssl: false
+  host: kamal.zecreator.com
   # Proxy connects to your container on port 80 by default.
   app_port: 3000
   healthcheck:
@@ -76,7 +76,6 @@ ssh:
 # hitting 404 on in-flight requests. Combines all files from new and old
 # version inside the asset_path.
 #
-asset_path: /app/./next
 
 # Configure rolling deploys by setting a wait time between batches of restarts.
 #
