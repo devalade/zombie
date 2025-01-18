@@ -21,7 +21,10 @@ proxy:
   ssl: true
   host: 65.109.232.76  
   # Proxy connects to your container on port 80 by default.
-  # app_port: 3000
+  app_port: 3000
+  healthcheck:
+    path: /
+    interval: 5
 
 # Credentials for your image host.
 registry:
@@ -36,6 +39,11 @@ registry:
 # Configure builder setup.
 builder:
   arch: amd64
+  remote: ssh://65.109.232.76
+  cache:
+    type: registry    # Uses a container registry for caching
+    options: mode=max # Maximum caching for better build performance
+    image: ghcr.io/devalade/zombie-build-cache
   # Pass in additional build args needed for your Dockerfile.
   # args:
   #   RUBY_VERSION: <%= File.read('.ruby-version').strip %>
@@ -56,9 +64,9 @@ builder:
 
 # Use a different ssh user than root
 #
-# ssh:
-#   user: app
-
+ssh:
+  user: root
+  keys: [ "~/.ssh/github-devalade-zombie.pub" ]
 # Use a persistent storage volume.
 #
 # volumes:
